@@ -5,12 +5,12 @@ import ListPurchaseOrdersService from '@modules/purchaseOrders/services/ListPurc
 
 export default class PurchaseOrdersController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const { name } = request.params;
+    const { name } = request.query;
 
     const listPurchaseOrders = container.resolve(ListPurchaseOrdersService);
 
     const purchaseOrders = await listPurchaseOrders.execute({
-      name,
+      name: String(name),
     });
 
     return response.json(purchaseOrders);

@@ -5,12 +5,12 @@ import ListWorkForcesService from '@modules/workForce/services/ListWorkForcesSer
 
 export default class PurchaseOrdersController {
   public async index(request: Request, response: Response): Promise<Response> {
-    const { name } = request.params;
+    const { name } = request.query;
 
     const listWorkForces = container.resolve(ListWorkForcesService);
 
     const workForces = await listWorkForces.execute({
-      name,
+      name: String(name),
     });
 
     return response.json(workForces);

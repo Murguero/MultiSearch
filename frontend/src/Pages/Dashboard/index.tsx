@@ -36,30 +36,67 @@ const Dashboard: React.FC = () => {
   const [workForce, setWorkForce] = useState<WorkForce[]>();
 
   useEffect(() => {
-    api.get<Equipment[]>(`/equipments/${newWord}`).then((response) => {
-      if (response.status === 404) {
-        setEquipments([]);
-      }
-      setEquipments(response.data);
-    });
+    if (newWord !== '') {
+      api
+        .get<Equipment[]>('/equipments/', {
+          params: {
+            name: newWord,
+          },
+        })
+        .then((response) => {
+          setEquipments(response.data);
+        });
+    } else {
+      setEquipments([]);
+    }
   }, [newWord]);
 
   useEffect(() => {
-    api.get<Material[]>(`/materials/${newWord}`).then((response) => {
-      setMaterials(response.data);
-    });
+    if (newWord !== '') {
+      api
+        .get<Material[]>('/materials/', {
+          params: {
+            name: newWord,
+          },
+        })
+        .then((response) => {
+          setMaterials(response.data);
+        });
+    } else {
+      setMaterials([]);
+    }
   }, [newWord]);
 
   useEffect(() => {
-    api.get<PurchaseOrder[]>(`/purchase-orders/${newWord}`).then((response) => {
-      setPurchaseOrders(response.data);
-    });
+    if (newWord !== '') {
+      api
+        .get<PurchaseOrder[]>('/purchase-orders/', {
+          params: {
+            name: newWord,
+          },
+        })
+        .then((response) => {
+          setPurchaseOrders(response.data);
+        });
+    } else {
+      setPurchaseOrders([]);
+    }
   }, [newWord]);
 
   useEffect(() => {
-    api.get<WorkForce[]>(`/work-force/${newWord}`).then((response) => {
-      setWorkForce(response.data);
-    });
+    if (newWord !== '') {
+      api
+        .get<WorkForce[]>('/work-force/', {
+          params: {
+            name: newWord,
+          },
+        })
+        .then((response) => {
+          setWorkForce(response.data);
+        });
+    } else {
+      setWorkForce([]);
+    }
   }, [newWord]);
 
   async function handleAddRepository(
@@ -72,19 +109,35 @@ const Dashboard: React.FC = () => {
       return;
     }
     try {
-      const responseEquip = await api.get(`/equipments/${newWord}`);
+      const responseEquip = await api.get('/equipments/', {
+        params: {
+          name: newWord,
+        },
+      });
       const searchEquipment: Equipment[] = responseEquip.data;
       setEquipments(searchEquipment);
 
-      const responseMateri = await api.get(`/materials/${newWord}`);
+      const responseMateri = await api.get('/materials/', {
+        params: {
+          name: newWord,
+        },
+      });
       const searchMaterial: Material[] = responseMateri.data;
       setMaterials(searchMaterial);
 
-      const responsePurch = await api.get(`/purchase-orders/${newWord}`);
+      const responsePurch = await api.get('/purchase-orders/', {
+        params: {
+          name: newWord,
+        },
+      });
       const searchPurchaseOrder: PurchaseOrder[] = responsePurch.data;
       setPurchaseOrders(searchPurchaseOrder);
 
-      const responseWork = await api.get(`/work-force/${newWord}`);
+      const responseWork = await api.get('/work-force/', {
+        params: {
+          name: newWord,
+        },
+      });
       const searchWorkForce: WorkForce[] = responseWork.data;
       setWorkForce(searchWorkForce);
 
@@ -93,6 +146,7 @@ const Dashboard: React.FC = () => {
       setInputError('Erro na busca por essa palavra');
     }
   }
+
   return (
     <>
       <img src={imgLogo} alt="MultiSearch" />
@@ -108,7 +162,7 @@ const Dashboard: React.FC = () => {
 
       <Repositories>
         <strong>Equipamento</strong>
-        {equipments?.length === 0 && <p>Nenhum resultado</p>}
+        {equipments?.length === 0 && newWord !== '' && <p>Nenhum resultado</p>}
         {equipments?.map((equipment) => (
           <div key={equipment.EquipmentID}>
             <strong>{equipment.EquipmentID}</strong>
@@ -119,7 +173,7 @@ const Dashboard: React.FC = () => {
 
       <Repositories>
         <strong>Material</strong>
-        {materials?.length === 0 && <p>Nenhum resultado</p>}
+        {materials?.length === 0 && newWord !== '' && <p>Nenhum resultado</p>}
         {materials?.map((material) => (
           <div key={material.MaterialID}>
             <strong>{material.MaterialID}</strong>
@@ -130,7 +184,9 @@ const Dashboard: React.FC = () => {
 
       <Repositories>
         <strong>Ordem de Compra</strong>
-        {purchaseOrders?.length === 0 && <p>Nenhum resultado</p>}
+        {purchaseOrders?.length === 0 && newWord !== '' && (
+          <p>Nenhum resultado</p>
+        )}
         {purchaseOrders?.map((purchaseOrder) => (
           <div key={purchaseOrder.PurchaseOrderID}>
             <strong>{purchaseOrder.PurchaseOrderID}</strong>
@@ -142,7 +198,7 @@ const Dashboard: React.FC = () => {
 
       <Repositories>
         <strong>Equipe</strong>
-        {workForce?.length === 0 && <p>Nenhum resultado</p>}
+        {workForce?.length === 0 && newWord !== '' && <p>Nenhum resultado</p>}
         {workForce?.map((workForces) => (
           <div key={workForces.WorkforceID}>
             <strong>{workForces.WorkforceID}</strong>
